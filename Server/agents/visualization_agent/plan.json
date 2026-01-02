@@ -1,0 +1,64 @@
+{
+  "charts": [
+    {
+      "id": "weekly_sales_trend",
+      "type": "line",
+      "x": "_date______",
+      "y": "_weekly_sales",
+      "aggregation": "mean",
+      "title": "Average Weekly Sales Trend",
+      "reason": "1. Question answered: What is the trend in average weekly sales over time? 2. Decision it supports: Helps understand sales performance over time, identify patterns, and plan stocking strategies.",
+      "priority": 0.95
+    },
+    {
+      "id": "holiday_sales_impact",
+      "type": "bar",
+      "x": "_holiday_flag",
+      "y": "_weekly_sales",
+      "aggregation": "mean",
+      "title": "Impact of Holidays on Weekly Sales",
+      "reason": "1. Question answered: How do holidays affect weekly sales? 2. Decision it supports: Assists in planning promotions and inventories for holiday periods.",
+      "priority": 0.9
+    },
+    {
+      "id": "temperature_effects",
+      "type": "scatter",
+      "x": "_temperature",
+      "y": "_weekly_sales",
+      "aggregation": "mean",
+      "title": "Temperature Effects on Weekly Sales",
+      "reason": "1. Question answered: Is there a correlation between temperature changes and sales performance? 2. Decision it supports: Guides weather-related stock and pricing strategies.",     
+      "priority": 0.85
+    },
+    {
+      "id": "fuel_price_correlation",
+      "type": "scatter",
+      "x": "_fuel_price",
+      "y": "_weekly_sales",
+      "aggregation": "mean",
+      "title": "Fuel Price Correlation with Weekly Sales",
+      "reason": "1. Question answered: What is the relationship between fuel prices and sales trends? 2. Decision it supports: Informs pricing strategies considering changes in operational costs.",
+      "priority": 0.8
+    },
+    {
+      "id": "cpi_unemployment_trends",
+      "type": "line",
+      "x": "_date______",
+      "y": "_cpi________",
+      "aggregation": "mean",
+      "title": "CPI Trends Over Time",
+      "reason": "1. Question answered: How does the Consumer Price Index (CPI) change over time? 2. Decision it supports: Understanding economic trends helps in pricing strategy and predicting consumer purchasing power.",
+      "priority": 0.75
+    },
+    {
+      "id": "unemployment_trends",
+      "type": "line",
+      "x": "_date______",
+      "y": "_unemployment",
+      "aggregation": "mean",
+      "title": "Unemployment Trends Over Time",
+      "reason": "1. Question answered: What are the trends in unemployment rates over time? 2. Decision it supports: Provides insights into economic health, influencing demand forecasting.",       
+      "priority": 0.7
+    }
+  ]
+}
