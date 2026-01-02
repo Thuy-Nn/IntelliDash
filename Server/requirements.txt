@@ -1,0 +1,9 @@
+langgraph
+langchain
+langchain-openai
+pandas
+python-dotenv
+plotly
+numpy
+flask
+flask_cors
