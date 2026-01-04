@@ -173,7 +173,7 @@ class AnalyticsAgent:
 
         analysis_constraints = {
             "dashboard_type": "executive",
-            "max_charts": 6,
+            "max_charts": 10,
             "rules": [
                 "Do not plot raw multi-series line charts without aggregation",
                 "For binary categorical variables, use mean or median, never sum",
@@ -292,7 +292,7 @@ class AnalyticsAgent:
 if __name__ == "__main__":
     # Simple test
     agent = AnalyticsAgent()
-    df = pd.read_csv("D:\Code\Bachelorarbeit\IntelliDash\Walmart_Sales.csv")
+    df = pd.read_csv("Walmart_Sales.csv")
     # stats = agent.calculate_statistics(df)
     # print("Statistics:", stats)
     # corrs = agent.identify_correlations(df)
@@ -307,4 +307,6 @@ if __name__ == "__main__":
     df = clean_result.cleaned_data
     analysis_state = AnalyticsState(cleaned_data=df)
     result_state = agent.analyze_data(analysis_state)
+    with open("analytics_output.json", "w", encoding="utf-8") as f:
+        json.dump(result_state.visualization_plan, f, indent=2)
     print("Visualization Plan:", result_state.visualization_plan)

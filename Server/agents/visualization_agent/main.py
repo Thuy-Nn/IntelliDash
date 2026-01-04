@@ -82,14 +82,14 @@ if __name__ == "__main__":
     agent = VisualizationAgent()
     viz_state = VisualizationState()
     # Example usage
-    df = pd.read_csv("D:\Code\Bachelorarbeit\IntelliDash\Walmart_Sales.csv")
+    df = pd.read_csv("Walmart_Sales.csv")
     from agents.cleaning_agent import CleaningAgent, CleaningState
     cleaning_agent = CleaningAgent()
     clean_state = CleaningState(raw_data=df)
     clean_result = cleaning_agent.clean_data(clean_state)
     df = clean_result.cleaned_data
     viz_state.cleaned_data = df
-    with open(r"D:\Code\Bachelorarbeit\IntelliDash\agents\visualization_agent\plan.json", "r", encoding="utf-8") as f:
+    with open(r"agents\visualization_agent\plan.json", "r", encoding="utf-8") as f:
         import json
         visualization_plan = json.load(f)
         print("Loaded visualization plan:", visualization_plan)
@@ -100,5 +100,5 @@ if __name__ == "__main__":
     charts = agent(viz_state)
     print("Generated charts:", charts.visualizations)
 
-    with open("visualization_output.json", "w", encoding="utf-8") as f:
+    with open(r"agents\visualization_agent\visualization_output.json", "w", encoding="utf-8") as f:
         json.dump(charts.visualizations, f, indent=4)
