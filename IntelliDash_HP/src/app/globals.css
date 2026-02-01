@@ -16,6 +16,7 @@
   --element: rgb(173, 200, 226);
   --element-hover: rgb(149, 178, 205);
   --element-active: rgb(111, 141, 168);
+  --text-decoration-color: #a78bfa;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -44,6 +45,7 @@
   --background-image-gbg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
   --background-image-gfg: linear-gradient(135deg, #60a5fa, #a78bfa);
   --shadow-panel: -12px 0 48px rgba(0, 0, 0, 0.3);
+  --color-text: var(--text-decoration-color);
 }
 
 html {
