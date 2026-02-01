@@ -25,7 +25,7 @@ class IngestionAgent:
     def __init__(self):
         self.supported_formats = ['.csv', '.xlsx', '.json', '.parquet']
     
-    def validate_file(self, file_path: str) -> bool:
+    def validate_file(self, file_path: str):
 
         path = Path(file_path)
         if not path.exists():
@@ -33,7 +33,7 @@ class IngestionAgent:
         return path.suffix.lower() in self.supported_formats
     
     """Main Pipeline to load data"""
-    def load_data(self, state: IngestionState) -> IngestionState:
+    def load_data(self, state: IngestionState):
 
         try:
             file_path = state.file_path
@@ -68,7 +68,7 @@ class IngestionAgent:
         
         return state
     
-    def get_data_summary(self, state: IngestionState) -> dict:
+    def get_data_summary(self, state: IngestionState):
 
         if state.raw_data is None:
             return {}

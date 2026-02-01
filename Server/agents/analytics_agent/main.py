@@ -32,7 +32,7 @@ class AnalyticsAgent:
     def __init__(self):
         self.llm_client = get_llm_client()
     
-    def _calculate_statistics(self, df: pd.DataFrame) -> dict:
+    def _calculate_statistics(self, df: pd.DataFrame):
 
         stats = {}
         numeric_cols = df.select_dtypes(include=[np.number]).columns
@@ -50,7 +50,7 @@ class AnalyticsAgent:
         
         return stats
     
-    def _identify_correlations(self, df: pd.DataFrame, threshold: float = 0.5) -> dict:
+    def _identify_correlations(self, df: pd.DataFrame, threshold: float = 0.5):
 
         numeric_df = df.select_dtypes(include=[np.number])
         correlations = numeric_df.corr()
@@ -66,7 +66,7 @@ class AnalyticsAgent:
         
         return strong_corrs
     
-    def _generate_categorical_insights(self, df: pd.DataFrame) -> dict:
+    def _generate_categorical_insights(self, df: pd.DataFrame):
 
         insights = {}
         categorical_cols = df.select_dtypes(include=['object']).columns
@@ -81,7 +81,7 @@ class AnalyticsAgent:
         return insights
     
     """Main analysis pipeline"""
-    def analyze_data(self, state: AnalyticsState) -> AnalyticsState:
+    def analyze_data(self, state: AnalyticsState):
         try:
             if state.cleaned_data is None:
                 state.error = "No cleaned data provided"

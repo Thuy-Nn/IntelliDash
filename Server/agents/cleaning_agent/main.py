@@ -37,7 +37,7 @@ class CleaningAgent:
         
         return df
     
-    def remove_duplicates(self, df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
+    def remove_duplicates(self, df: pd.DataFrame):
 
         initial_len = len(df)
         df = df.drop_duplicates()
