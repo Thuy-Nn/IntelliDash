@@ -2,25 +2,30 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 
-export default function LinePlot({commonProps, chart}) {
+export default function LinePlot({commonProps, chart, theme}) {
+    const secondaryColor = theme?.secondaryColor || '#a78bfa';
+    const accentColor = theme?.accentColor || '#f472b6';
+    const textSecondary = theme?.textSecondary || 'rgba(255, 255, 255, 0.6)';
+    const fontFamily = theme?.fontFamily || '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    
     return <ResponsiveContainer width="100%" height="100%">
                 <LineChart {...commonProps}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(167, 139, 250, 0.1)" />
                     <XAxis 
                         dataKey="x" 
-                        tick={{ fontSize: '0,5rem', fill: 'rgba(255, 255, 255, 0.6)' }}
-                        stroke="rgba(255, 255, 255, 0.3)"
+                        tick={{ fontSize: '0.5rem', fill: textSecondary, fontFamily }}
+                        stroke={textSecondary}
                     />
                     <YAxis 
-                        tick={{ fontSize: '0.5rem', fill: 'rgba(255, 255, 255, 0.6)' }}
-                        stroke="rgba(255, 255, 255, 0.3)"
+                        tick={{ fontSize: '0.5rem', fill: textSecondary, fontFamily }}
+                        stroke={textSecondary}
                     />
-                    <Tooltip content={HorrorTooltip}/>
-                    <Legend wrapperStyle={{ color: 'rgba(255, 255, 255, 0.8)', fontSize:'0.8rem'}} />
+                    <Tooltip content={(props) => <HorrorTooltip {...props} theme={theme} />}/>
+                    <Legend wrapperStyle={{ color: textSecondary, fontSize:'0.8rem', fontFamily }} />
                     <Line 
                         type="monotone" 
                         dataKey="y" 
-                        stroke="url(#lineGradient)" 
+                        stroke={`url(#lineGradient)`} 
                         strokeWidth={1.5}
                         dot={false}
                         isAnimationActive={false}
@@ -28,15 +33,17 @@ export default function LinePlot({commonProps, chart}) {
                     />
                     <defs>
                         <linearGradient id="lineGradient">
-                            <stop offset="0%" stopColor="#a78bfa" />
-                            <stop offset="100%" stopColor="#f472b6" />
+                            <stop offset="0%" stopColor={secondaryColor} />
+                            <stop offset="100%" stopColor={accentColor} />
                         </linearGradient>
                     </defs>
                 </LineChart>
             </ResponsiveContainer>
 }
 
-const HorrorTooltip = ({ active, payload, label }) => {
+const HorrorTooltip = ({ active, payload, label, theme }) => {
+    const fontFamily = theme?.fontFamily || '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    
     if (active && payload && payload.length) {
         return (
             <div
@@ -47,7 +54,7 @@ const HorrorTooltip = ({ active, payload, label }) => {
                 padding: '0.5rem 0.5rem',
                 fontSize: '0.7rem',
                 color: '#white',
-                fontFamily: 'Comic Sans MS, cursive, sans-serif',
+                fontFamily: fontFamily,
                 letterSpacing: '0.05em'
             }}
         >
@@ -56,9 +63,6 @@ const HorrorTooltip = ({ active, payload, label }) => {
             </div>
             <div>
                 {payload[0].name}: <strong>{payload[0].value}</strong>
-            </div>
-            <div>
-                {/* {payload[1].name}: <strong>{payload[1].value}</strong> */}
             </div>
         </div>
         )
