@@ -1,3 +1,3 @@
-from .main import AnalyticsState, AnalyticsAgent
+from .__main__ import AnalyticsState, AnalyticsAgent
 
 __all__ = ["AnalyticsAgent", "AnalyticsState"]

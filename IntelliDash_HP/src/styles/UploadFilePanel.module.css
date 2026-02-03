@@ -1,0 +1,60 @@
+.uploaderOuter {
+    /* mb-4 p-4 border-2 border-dashed border-border rounded-lg text-center
+    min-h-40 flex flex-col justify-center items-center 
+    transition-border duration-200 cursor-pointer*/
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 2px dashed var(--border);
+    border-radius: 0.375rem;
+    text-align: center;
+    min-height: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: border-color 0.2s;
+    cursor: pointer;
+}
+
+.uploaderOuter:hover {
+    /* hover:border-foreground */
+    border-color: var(--foreground);
+}
+
+.icon {
+    /* text-5xl opacity-20 mb-4 */
+    font-size: 3rem;
+    opacity: 0.2;
+    margin-bottom: 1rem;
+}
+
+.message {
+    /* text-sm text-foreground */
+    font-size: small;
+    color: var(--foreground);
+}
+
+.message__positive {
+    /* text-sm text-accent */
+    font-size: small;
+    color: var(--positive);
+}
+
+.message__negative {
+    /* text-sm text-negative */
+    font-size: small;
+    color: var(--negative);
+}
+
+.selectedFile {
+    font-weight: bold;
+}
+
+.openDashboardOuter {
+    margin-top: 4rem;
+}
+
+.openDashboardOuter > span {
+    display: block;
+    margin-bottom: 1rem;
+}

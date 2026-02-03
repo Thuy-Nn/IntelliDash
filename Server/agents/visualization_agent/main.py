@@ -55,7 +55,7 @@ class VisualizationAgent:
 
         return data
 
-    def __call__(self, state: VisualizationState) -> VisualizationState:
+    def __call__(self, state: VisualizationState):
 
         try:
             charts = []

@@ -116,31 +116,31 @@ class DashboardOrchestrator:
             print(f"Skipping (previous error)")
             return state
         
-        # analytics_state = AnalyticsState(cleaned_data=state["cleaned_data"])
-        # result = self.analytics_agent.analyze_data(analytics_state)
+        analytics_state = AnalyticsState(cleaned_data=state["cleaned_data"])
+        result = self.analytics_agent.analyze_data(analytics_state)
         
-        # state["current_stage"] = "analytics"
-        # state["messages"].append(f"Analytics: {result.status}")
+        state["current_stage"] = "analytics"
+        state["messages"].append(f"Analytics: {result.status}")
         
-        # if result.status == "completed":
-        #     state["analysis_insights"] = result.insights
-        #     state["visualization_plan"] = result.visualization_plan
-        #     print(f"Analysis completed!")
-        #     if result.insights.get('correlations'):
-        #         print(f"   Strong correlations found: {len(result.insights['correlations'])}")
-        #     if result.insights.get('data_quality'):
-        #         quality = result.insights['data_quality']
-        #         print(f"   Data completeness: {quality['completeness']:.1f}%")
-        #     if result.visualization_plan:
-        #         print(f"   Visualization plan created with {len(result.visualization_plan)} items")
-        # else:
-        #     state["error"] = result.error
-        #     print(f"Error: {result.error}")
+        if result.status == "completed":
+            state["analysis_insights"] = result.insights
+            state["visualization_plan"] = result.visualization_plan
+            print(f"Analysis completed!")
+            if result.insights.get('correlations'):
+                print(f"   Strong correlations found: {len(result.insights['correlations'])}")
+            if result.insights.get('data_quality'):
+                quality = result.insights['data_quality']
+                print(f"   Data completeness: {quality['completeness']:.1f}%")
+            if result.visualization_plan:
+                print(f"   Visualization plan created with {len(result.visualization_plan)} items")
+        else:
+            state["error"] = result.error
+            print(f"Error: {result.error}")
 
-        with open(r"D:\Code\Bachelorarbeit\IntelliDash\Server\agents\visualization_agent\plan.json", "r", encoding="utf-8") as f:
-            import json
-            visualization_plan = json.load(f)
-        state["visualization_plan"] = visualization_plan
+        # with open(r"visualization_agent_plan.json", "r", encoding="utf-8") as f:
+        #     import json
+        #     visualization_plan = json.load(f)
+        #     state["visualization_plan"] = visualization_plan
         
         return state
     
@@ -210,18 +210,18 @@ class DashboardOrchestrator:
 
 def main():
 
-    file_path = "D:\Code\Bachelorarbeit\IntelliDash\Server\Walmart_Sales.csv"
+    file_path = "Walmart_Sales.csv"
 
     orchestrator = DashboardOrchestrator()
     result = orchestrator.create_dashboard(file_path)
     
-    print("\nWorkflow Results:")
-    print("-" * 50)
-    print("Visualizations:", result["visualizations"])
+    # print("\nWorkflow Results:")
+    # print("-" * 50)
+    # print("Visualizations:", result["visualizations"])
 
     with open("visualization_output.json", "w", encoding="utf-8") as f:
         import json
-        json.dump(result["visualizations"], f, indent=4)    
+        json.dump(result["visualizations"], f)    
  
     print("\nIntelliDash workflow completed.")
 
