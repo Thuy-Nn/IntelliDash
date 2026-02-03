@@ -1,0 +1,26 @@
+.container {
+  font-size: 3rem;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-bottom: 2rem;
+}
+
+.unit {
+  margin-right: 0.5rem;
+  font-size: 2.25rem;
+  opacity: 0.5;
+  vertical-align: baseline;
+}
+
+.unitPrefix {
+  margin-right: 0.5rem;
+}
+
+.unitSuffix {
+  margin-left: 0.5rem;
+}
