@@ -1,6 +1,6 @@
 ## IntelliDash
 
-Live app (Firebase Hosting): https://intellid.web.app/
+Live app: https://intellid.web.app/
 
 IntelliDash is an AI-powered data analytics dashboard that turns uploaded datasets into an interactive dashboard with automatically generated visualizations.
 
@@ -10,20 +10,20 @@ The image above shows a high-level overview of the system. IntelliDash is a mult
 
 ### Repository structure
 
-- `IntelliDash_HP/` – Next.js (App Router) frontend, exported as a static site and deployed to Firebase Hosting
+- `IntelliDash_HP/` – Next.js (App Router) frontend, exported as a static site 
 - `Server/` – Python/Flask REST API that runs the agent pipeline (ingestion → cleaning → analytics → visualization)
 
 ### Tech stack
 
-- Frontend: Next.js (static export), React, Recharts, Tailwind
-- Backend: Flask + CORS, LangGraph/LangChain, OpenAI, Pandas/NumPy, Plotly
+- Frontend: Next.js (static export), React, Recharts
+- Backend: Flask + CORS, LangGraph, OpenAI, Pandas/NumPy, Plotly
 - Deployment: Firebase Hosting (frontend), Cloud Run (backend)
 
 ## Local development
 
 ### 1) Frontend (Next.js)
 
-Prereqs: Node.js (recommended: latest LTS) + npm.
+Prereqs: Node.js + npm.
 
 ```bash
 cd IntelliDash_HP
@@ -69,7 +69,7 @@ By default it listens on `http://localhost:8080`.
 
 - `GET /` – health check
 - `POST /upload` – multipart/form-data with field `file`
-	- Allowed types (backend): `csv`, `xlsx`, `json`, `parquet`
+	- Allowed types (backend): `csv`, `xlsx`
 	- Response contains `dashboard` (the generated visualization spec used by the frontend)
 
 The frontend’s upload panel currently allows `CSV`, `XLSX`, `XLS` and limits size to 10MB.
