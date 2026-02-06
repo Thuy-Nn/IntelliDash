@@ -1,0 +1,13 @@
+{
+  "hosting": {
+    "site": "intellid",
+    "public": "out",
+    "cleanUrls": true,
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "**/unused/**"
+    ]
+  }
+}

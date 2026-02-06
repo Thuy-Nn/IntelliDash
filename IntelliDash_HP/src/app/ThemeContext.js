@@ -5,8 +5,8 @@ import React, { createContext, useState, useEffect } from 'react';
 export const ThemeContext = createContext();
 
 const DEFAULT_THEME = {
-    dashboardName: 'Untitled Dashboard',
-    dashboardDesc: 'Real-time insights and data visualization',
+    dashboardName: '',
+    dashboardDesc: '',
 
     // Primary colors
     primaryColor: '#60a5fa',

@@ -1,10 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
-import styles from '../styles/Dashboard.module.css'
-
-
-import { useTheme } from './ThemeContext'
+import { useState, useRef } from 'react'
 import BarPlot from '../components/charts/BarChart'
 import LinePlot from '../components/charts/LineChart'
 import PiePlot from '../components/charts/PieChart'
@@ -14,19 +10,24 @@ import IconButton from '../components/IconButton'
 import SaveLayoutPanel from '../components/SaveLayoutPanel'
 import SettingsPanel from '../components/SettingsPanel'
 import UploadFilePanel from '../components/UploadFilePanel'
+import styles from '../styles/Dashboard.module.css'
+import { useTheme } from './ThemeContext'
+import { useScreenshot } from '@/components/useScreenshot'
 
 
 const DEFAULT_CHART_SIZE = {
-  'single_value': [2, 1],
-  'text': [2, 1],
-  'bar': [2, 2],
-  'line': [2, 2],
-  'scatter': [2, 2],
-  'pie': [2, 2],
+  'single_value': [1, 1],
+  'text': [1, 1],
+  'bar': [1, 2],
+  'line': [1, 2],
+  'scatter': [1, 2],
+  'pie': [1, 2],
 }
 
+const GRID_COLUMNS = 3
+const GRID_ROWS = 6
+
 export default function Dashboard() {
-  const [loading, setLoading] = useState(true)
   const [chartsList, setChartsList] = useState([])
   const [chartSizes, setChartSizes] = useState({})
   const [editMode, setEditMode] = useState(false)
@@ -34,51 +35,10 @@ export default function Dashboard() {
   const [uploadFilePanelOpen, setUploadFilePanelOpen] = useState(false)
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false)
   const [saveLayoutPanelOpen, setSaveLayoutPanelOpen] = useState(false)
-  const { theme } = useTheme()
+  const { theme, updateTheme } = useTheme()
 
-  useEffect(() => {
-    const loadVisualizationData = async () => {
-      try {
-        console.log('Fetching visualization data...')
-        const response = await fetch('/visualization_output.json')
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const charts = await response.json()
-        console.log('Data loaded successfully:', charts.length, 'charts')
-
-        for (let i = 0; i < charts.length; i++) {
-          charts[i].size = DEFAULT_CHART_SIZE[charts[i].chart.type] || [2, 1]
-        }
-
-        // reduce scatter plots for initial load test
-        // for (let i = 0; i < charts.length; i++) {
-        //     if (charts[i].chart.type === 'scatter') {
-        //         charts[i].values.x = charts[i].values.x.slice(0, 200)
-        //         charts[i].values.y = charts[i].values.y.slice(0, 200)
-        //     }
-        // }
-
-        setChartsList(charts)
-        // setChartsList(charts.filter(c => c.chart.type !== 'scatter'))
-        setLoading(false)
-      } catch (error) {
-        console.error('Error loading visualization data:', error)
-        setLoading(false)
-      }
-    }
-
-    loadVisualizationData()
-  }, [])
-
-  if (loading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingSpinner}></div>
-        <p className={styles.loadingText}>Loading your analytics...</p>
-      </div>
-    )
-  }
+  const ref = useRef(null)
+  const [screenshotImage, takeScreenshot] = useScreenshot()
 
   const handleChartResizeWidth = (index, width) => {
     setChartSizes(prev => {
@@ -145,6 +105,29 @@ export default function Dashboard() {
     return 1
   }
 
+  const onUploadFilePanelClose = (newDashboardData) => {
+    setUploadFilePanelOpen(false)
+    if (newDashboardData) {
+      const newCharts = newDashboardData.dashboard || []
+      setChartsList(prev => [...prev, ...newCharts])
+    }
+  }
+
+  const openSaveLayoutPanel = () => {
+    takeScreenshot(ref.current, { backgroundColor: '#0f172a', scale: 0.2 })
+    setSaveLayoutPanelOpen(true)
+  }
+
+  const loadDashboard = (data) => {
+    const { chartsList: loadedCharts, chartSizes: loadedSizes } = data.chartData
+    setChartsList(loadedCharts)
+    setChartSizes(loadedSizes)
+    updateTheme(data.theme)
+
+    if (uploadFilePanelOpen) setUploadFilePanelOpen(false)
+    if (saveLayoutPanelOpen) setSaveLayoutPanelOpen(false)
+  }
+
 
   return (
     <div
@@ -161,40 +144,52 @@ export default function Dashboard() {
         '--font-size-multiplier': getFontSizeMultiplier(),
       }}
     >
-      <div className={styles.headerSection}>
-        <div className={styles.headerTop}>
-          <div>
-            <h1 className={styles.title}>{theme.dashboardName}</h1>
-            <p className={styles.subtitle}>{theme.dashboardDesc}</p>
-          </div>
-          <div className={styles.buttonGroup}>
-            <IconButton
-              iconClass={editMode ? "icon-check-circle" : "icon-edit-2"}
-              label={editMode ? "Done" : "Edit"} title={editMode ? "Exit edit mode" : "Enter edit mode"}
-              onClick={() => setEditMode(!editMode)}
-            />
-            <IconButton iconClass="icon-file-plus" label="New" title="Create a new dashboard"
-              onClick={() => setUploadFilePanelOpen(!uploadFilePanelOpen)} />
-            <IconButton iconClass="icon-bookmark" label="Save" title="Save the current layout"
-              onClick={() => setSaveLayoutPanelOpen(!saveLayoutPanelOpen)} />
-            <IconButton iconClass="icon-settings" label="Settings" title="Customize colors and fonts"
-              onClick={() => setSettingsPanelOpen(!settingsPanelOpen)}
-            />
-          </div>
+      {chartsList.length === 0 ? <div className={styles.emptyStateOuter}>
+        <span className={styles.emptyStateTitle}>IntelliDash</span>
+        <div className={styles.emptyStateInner}>
+          <img src="/images/missing_dashboard.png" alt="No charts" className={styles.emptyStateImage} />
+          <p className={styles.emptyStateText}>No charts to display.</p>
+          <IconButton label="New Dashboard" title="Create a new dashboard"
+            onClick={() => setUploadFilePanelOpen(!uploadFilePanelOpen)} />
         </div>
       </div>
+        :
+        <div className={styles.headerSection}>
+          <div className={styles.headerTop}>
+            <div>
+              <h1 className={styles.title}>{theme.dashboardName}</h1>
+              <p className={styles.subtitle}>{theme.dashboardDesc}</p>
+            </div>
+            <div className={styles.buttonGroup}>
+              <button className={'icon-menu ' + styles.menuIcon} />
+              <div className={styles.menuOuter}>
+                <div className={styles.menuInner}>
+                  <IconButton
+                    iconClass={editMode ? "icon-check-circle" : "icon-edit-2"}
+                    label={editMode ? "Done" : "Edit"} title={editMode ? "Exit edit mode" : "Enter edit mode"}
+                    onClick={() => setEditMode(!editMode)}
+                  />
+                  <IconButton iconClass="icon-file-plus" label="New" title="Create a new dashboard"
+                    onClick={() => setUploadFilePanelOpen(!uploadFilePanelOpen)} />
+                  <IconButton iconClass="icon-bookmark" label="Save" title="Save the current layout"
+                    onClick={openSaveLayoutPanel} />
+                  <IconButton iconClass="icon-settings" label="Settings" title="Customize colors and fonts"
+                    onClick={() => setSettingsPanelOpen(!settingsPanelOpen)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
 
-      <UploadFilePanel isOpen={uploadFilePanelOpen} onClose={() => setUploadFilePanelOpen(false)} />
-      <SettingsPanel isOpen={settingsPanelOpen} onClose={() => setSettingsPanelOpen(false)} />
-      <SaveLayoutPanel isOpen={saveLayoutPanelOpen} onClose={() => setSaveLayoutPanelOpen(false)} />
-
-      <div className={styles.chartsGrid}>
-        {chartsList.map((c, i) => {
-          const size = chartSizes[i] || DEFAULT_CHART_SIZE[c.chart.type] || [1, 1]
-          return (
-            <div
+      {chartsList.length && <div className={styles.chartGridOuter}>
+        <div className={styles.chartsGrid} ref={ref}>
+          {chartsList.map((c, i) => {
+            const size = chartSizes[i] || DEFAULT_CHART_SIZE[c.chart.type] || [1, 1]
+            return <div
               key={i}
-              className={`${styles.chartCard} ${editMode ? styles.chartCardDraggable : ''} ${draggedIndex === i ? styles.chartCardDragging : ''}`}
+              className={`${styles.chartCard} ${styles[`chartCard__${c.chart.type}`]} ${editMode ? styles.chartCardDraggable : ''} ${draggedIndex === i ? styles.chartCardDragging : ''}`}
               style={{
                 gridColumn: `span ${size[0]}`,
                 gridRow: `span ${size[1]}`
@@ -215,13 +210,13 @@ export default function Dashboard() {
                         onClick={() => handleChartResizeWidth(i, Math.max(size[0] - 1, 1))}
                         disabled={size[0] <= 1}
                       >
-                        −
+                        -
                       </button>
                       <span className={styles.sizeValue}>{size[0]}</span>
                       <button
                         className={styles.resizeBtn}
-                        onClick={() => handleChartResizeWidth(i, Math.min(size[0] + 1, 6))}
-                        disabled={size[0] >= 6}
+                        onClick={() => handleChartResizeWidth(i, Math.min(size[0] + 1, GRID_COLUMNS))}
+                        disabled={size[0] >= GRID_COLUMNS}
                       >
                         +
                       </button>
@@ -233,13 +228,13 @@ export default function Dashboard() {
                         onClick={() => handleChartResizeHeight(i, Math.max(size[1] - 1, 1))}
                         disabled={size[1] <= 1}
                       >
-                        −
+                        -
                       </button>
                       <span className={styles.sizeValue}>{size[1]}</span>
                       <button
                         className={styles.resizeBtn}
-                        onClick={() => handleChartResizeHeight(i, Math.min(size[1] + 1, 6))}
-                        disabled={size[1] >= 6}
+                        onClick={() => handleChartResizeHeight(i, Math.min(size[1] + 1, GRID_ROWS))}
+                        disabled={size[1] >= GRID_ROWS}
                       >
                         +
                       </button>
@@ -251,9 +246,14 @@ export default function Dashboard() {
                 {renderChart(c, theme)}
               </div>
             </div>
-          )
-        })}
-      </div>
+          })}
+        </div>
+      </div>}
+
+      <UploadFilePanel isOpen={uploadFilePanelOpen} onClose={onUploadFilePanelClose} onDashboardLoad={loadDashboard} />
+      <SaveLayoutPanel data={{ chartsList, chartSizes }} thumb={screenshotImage} onDashboardLoad={loadDashboard}
+        isOpen={saveLayoutPanelOpen} onClose={() => setSaveLayoutPanelOpen(false)} />
+      <SettingsPanel isOpen={settingsPanelOpen} onClose={() => setSettingsPanelOpen(false)} />
     </div>
   )
 }

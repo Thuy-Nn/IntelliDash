@@ -1,6 +1,7 @@
 .buttonOuter {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     padding: 0.25rem 0.5rem;
     border-radius: 0.5rem;
@@ -8,6 +9,11 @@
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s;
+}
+
+.buttonOuter[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 .buttonOuter span {

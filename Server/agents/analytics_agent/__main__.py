@@ -33,7 +33,7 @@ class AnalyticsAgent:
     def __init__(self):
         self.llm_client = get_llm_client()
     
-    def _calculate_statistics(self, df: pd.DataFrame) -> dict:
+    def _calculate_statistics(self, df: pd.DataFrame):
 
         stats = {}
         numeric_cols = df.select_dtypes(include=[np.number]).columns
@@ -51,7 +51,7 @@ class AnalyticsAgent:
         
         return stats
     
-    def _identify_correlations(self, df: pd.DataFrame, threshold: float = 0.5) -> dict:
+    def _identify_correlations(self, df: pd.DataFrame, threshold: float = 0.5):
 
         numeric_df = df.select_dtypes(include=[np.number])
         correlations = numeric_df.corr()
@@ -67,7 +67,7 @@ class AnalyticsAgent:
         
         return strong_corrs
     
-    def _generate_categorical_insights(self, df: pd.DataFrame) -> dict:
+    def _generate_categorical_insights(self, df: pd.DataFrame):
 
         insights = {}
         categorical_cols = df.select_dtypes(include=['object']).columns
@@ -124,6 +124,7 @@ class AnalyticsAgent:
                 "For single_value chart, use sum or count for discrete metrics, mean or median for continuous metrics.",
                 "Do not plot raw multi-series line charts without aggregation",
                 "For binary categorical variables, use mean or median, never sum",
+                "Do not use pie charts for columns with more than 5 unique values",
                 "Do not use heatmap for continuous vs categorical relationships",
                 "Prefer aggregated metrics over raw data points",
                 "Each chart must answer a question"
@@ -150,10 +151,10 @@ class AnalyticsAgent:
         
         context = {
             "domain": domain_info,
-            # "statistics": state.statistics,
+            "statistics": state.statistics,
             "correlations": state.insights.get('correlations', {}),
             "categorical_insights": state.insights.get('categorical', {}),
-            # "data_quality": state.insights.get('data_quality', {}),
+            "data_quality": state.insights.get('data_quality', {}),
             # "columns": list(state.cleaned_data.columns) if state.cleaned_data is not None else [],
             "sample_data": state.cleaned_data.head(1).to_dict(orient='records') if state.cleaned_data is not None else []
         }
@@ -264,7 +265,7 @@ class AnalyticsAgent:
             return {}
         
     """Main analysis pipeline"""
-    def analyze_data(self, state: AnalyticsState) -> AnalyticsState:
+    def analyze_data(self, state: AnalyticsState):
         try:
             if state.cleaned_data is None:
                 state.error = "No cleaned data provided"

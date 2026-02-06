@@ -1,38 +1,66 @@
+import { useEffect, useState } from 'react'
 import styles from '../styles/OpenDashboardView.module.css'
-import IconButton from './IconButton'
 
 
-export default function OpenDashboardsView() {
-    return <div>
-        <LayoutItem name="Sales Dashboard" thumb='/images/thumb1.jpg' createdAt="2026-01-05T13:40:26" />
-        <LayoutItem name="Marketing Overview" thumb='/images/thumb2.jpg' createdAt="2026-01-12T16:25:04" />
-        <LayoutItem name="Financial Summary" thumb='/images/thumb3.jpg' createdAt="2026-01-21T21:10:32" />
-    </div>
+export default function OpenDashboardsView({ onDashboardLoad }) {
+  const [dashboards, setDashboards] = useState([])
+
+  useEffect(() => {
+    // Load saved dashboards from localStorage
+    const loaded = []
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (key.startsWith('dashboard_')) {
+        const data = JSON.parse(localStorage.getItem(key))
+        loaded.push(data)
+      }
+    }
+    // sort by created date desc
+    loaded.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    setDashboards(loaded)
+  }, [dashboards.length])  // re-run when a dashboard is added or removed
+
+  const loadDashboard = idx => {
+    onDashboardLoad(dashboards[idx])
+  }
+
+  const deleteDashboard = idx => {
+    if (!confirm(`Are you sure you want to delete the dashboard "${dashboards[idx].name}"?`)) return
+    localStorage.removeItem(`dashboard_${dashboards[idx].name}`)
+    setDashboards(dashboards.filter((_, i) => i !== idx))
+  }
+
+  return <div>
+    {dashboards.length === 0 && <div className={styles.empty}>No saved layouts found.</div>}
+    {dashboards.map((d, i) => <LayoutItem key={i} name={d.name} thumb={d.thumb} createdAt={d.createdAt}
+      onLoad={() => loadDashboard(i)} onDelete={() => deleteDashboard(i)} />)}
+  </div>
 }
 
 
 function LayoutItem({ name, thumb, createdAt, onLoad, onDelete }) {
-    return <div className={styles.outer} onClick={onLoad}>
-        <div className={styles.thumb} style={{ backgroundImage: `url(${thumb})` }} />
-        <div className={styles.info}>
-            <div className={styles.name}>{name}</div>
-            <div className={styles.time}>{formatIso(createdAt)}</div>
-            <div className={styles.buttons}>
-                <IconButton style={{ color: 'var(--negative)' }} iconClass="icon-trash-2"
-                    transparent={true} title="Delete" onClick={onDelete} />
-            </div>
-        </div>
+  return <div className={styles.outer}>
+    <div className={styles.inner} onClick={onLoad}>
+      {thumb && <div className={styles.thumb} style={{ backgroundImage: `url(${thumb})` }} />}
+      <div className={styles.info}>
+        <div className={styles.name}>{name}</div>
+        <div className={styles.time}>{formatIso(createdAt)}</div>
+      </div>
     </div>
+    <div className={styles.buttons} title="Delete" onClick={onDelete}>
+      <span style={{ color: 'var(--negative)' }} className="icon-trash-2" />
+    </div>
+  </div>
 }
 
 
 function formatIso(iso) {
-    const locale = navigator.language || 'de-DE'
-    return new Date(iso).toLocaleString(locale, {
-        hour: '2-digit',
-        minute: '2-digit',
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit'
-    })
+  const locale = navigator.language || 'de-DE'
+  return new Date(iso).toLocaleString(locale, {
+    hour: '2-digit',
+    minute: '2-digit',
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit'
+  })
 }

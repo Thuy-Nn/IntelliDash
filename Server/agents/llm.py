@@ -9,7 +9,10 @@ def get_llm_client():
 
     global _llm
     if _llm is None:
-        _llm = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            api_key = os.environ.get("OPENAI_API_KEY")
+        _llm = OpenAI(api_key=api_key)
     return _llm
 
 if __name__ == "__main__":

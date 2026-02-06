@@ -68,7 +68,7 @@ class IngestionAgent:
         
         return state
     
-    def get_data_summary(self, state: IngestionState) -> dict:
+    def get_data_summary(self, state: IngestionState):
 
         if state.raw_data is None:
             return {}

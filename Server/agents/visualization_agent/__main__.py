@@ -41,7 +41,7 @@ class VisualizationAgent:
             unit = CSV_UNIT.get(y, "")
             if unit:
                 if unit.endswith("-"):
-                    return {"value": value, "unit": unit[1:], "position": "prefix"}
+                    return {"value": value, "unit": unit[:-1], "position": "prefix"}
 
             return {"value": value}
         
@@ -91,7 +91,7 @@ class VisualizationAgent:
 
         return data
 
-    def __call__(self, state: VisualizationState) -> VisualizationState:
+    def __call__(self, state: VisualizationState):
 
         try:
             charts = []

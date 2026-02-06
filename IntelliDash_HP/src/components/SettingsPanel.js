@@ -56,8 +56,8 @@ export default function SettingsPanel({ isOpen, onClose }) {
     const { theme, updateTheme, resetTheme } = useTheme()
     const [expandedSection, setExpandedSection] = useState('colors')
 
-    const handleColorChange = (colorKey, value) => {
-        updateTheme({ [colorKey]: value })
+    const handleChange = (key, value) => {
+        updateTheme({ [key]: value })
     }
 
     const applyPresetTheme = (preset) => {
@@ -77,7 +77,7 @@ export default function SettingsPanel({ isOpen, onClose }) {
                 className="w-full mt-2 mb-4 p-2 rounded border border-border bg-element text-foreground"
                 placeholder="Enter dashboard name..."
                 value={theme.dashboardName || ''}
-                onChange={(e) => handleColorChange('dashboardName', e.target.value)}
+                onChange={e => handleChange('dashboardName', e.target.value)}
             />
             <span className='font-bold opacity-50'>Dashboard description</span>
             <input
@@ -85,7 +85,7 @@ export default function SettingsPanel({ isOpen, onClose }) {
                 className="w-full mt-2 mb-4 p-2 rounded border border-border bg-element text-foreground"
                 placeholder="Enter dashboard description..."
                 value={theme.dashboardDesc || ''}
-                onChange={(e) => handleColorChange('dashboardDesc', e.target.value)}
+                onChange={e => handleChange('dashboardDesc', e.target.value)}
             />
         </div>
         {/* Preset Themes Section */}
@@ -116,7 +116,7 @@ export default function SettingsPanel({ isOpen, onClose }) {
                     <input
                         type="color"
                         value={theme.primaryColor}
-                        onChange={(e) => handleColorChange('primaryColor', e.target.value)}
+                        onChange={(e) => handleChange('primaryColor', e.target.value)}
                     />
                     <span>{theme.primaryColor}</span>
                 </div>
@@ -127,7 +127,7 @@ export default function SettingsPanel({ isOpen, onClose }) {
                     <input
                         type="color"
                         value={theme.primaryDark}
-                        onChange={(e) => handleColorChange('primaryDark', e.target.value)}
+                        onChange={(e) => handleChange('primaryDark', e.target.value)}
                     />
                     <span>{theme.primaryDark}</span>
                 </div>
@@ -139,7 +139,7 @@ export default function SettingsPanel({ isOpen, onClose }) {
                     <input
                         type="color"
                         value={theme.secondaryColor}
-                        onChange={(e) => handleColorChange('secondaryColor', e.target.value)}
+                        onChange={(e) => handleChange('secondaryColor', e.target.value)}
                     />
                     <span>{theme.secondaryColor}</span>
                 </div>
@@ -151,7 +151,7 @@ export default function SettingsPanel({ isOpen, onClose }) {
                     <input
                         type="color"
                         value={theme.accentColor}
-                        onChange={(e) => handleColorChange('accentColor', e.target.value)}
+                        onChange={(e) => handleChange('accentColor', e.target.value)}
                     />
                     <span>{theme.accentColor}</span>
                 </div>
@@ -163,7 +163,7 @@ export default function SettingsPanel({ isOpen, onClose }) {
                     <input
                         type="color"
                         value={theme.textColor}
-                        onChange={(e) => handleColorChange('textColor', e.target.value)}
+                        onChange={(e) => handleChange('textColor', e.target.value)}
                     />
                     <span>{theme.textColor}</span>
                 </div>
@@ -176,7 +176,7 @@ export default function SettingsPanel({ isOpen, onClose }) {
                 <label>Font Family</label>
                 <select
                     value={theme.fontFamily}
-                    onChange={(e) => handleColorChange('fontFamily', e.target.value)}
+                    onChange={(e) => handleChange('fontFamily', e.target.value)}
                     className={styles.select}
                 >
                     {FONT_FAMILIES.map((font, idx) => (
@@ -192,7 +192,7 @@ export default function SettingsPanel({ isOpen, onClose }) {
                         <button
                             key={size}
                             className={`${styles.optionBtn} ${theme.fontSize === size ? styles.optionBtnActive : ''}`}
-                            onClick={() => handleColorChange('fontSize', size)}
+                            onClick={() => handleChange('fontSize', size)}
                         >
                             {size.charAt(0).toUpperCase() + size.slice(1)}
                         </button>
@@ -207,7 +207,7 @@ export default function SettingsPanel({ isOpen, onClose }) {
                         <button
                             key={weight}
                             className={`${styles.optionBtn} ${theme.fontWeight === weight ? styles.optionBtnActive : ''}`}
-                            onClick={() => handleColorChange('fontWeight', weight)}
+                            onClick={() => handleChange('fontWeight', weight)}
                         >
                             {weight.charAt(0).toUpperCase() + weight.slice(1)}
                         </button>
