@@ -15,13 +15,13 @@ The image above shows a high-level overview of the system. IntelliDash is a mult
 
 ### Tech stack
 
-- Frontend: Next.js (static export), React, Recharts
+- Frontend: Next.js, React, Recharts
 - Backend: Flask + CORS, LangGraph, OpenAI, Pandas/NumPy, Plotly
 - Deployment: Firebase Hosting (frontend), Cloud Run (backend)
 
 ## Local development
 
-### 1) Frontend (Next.js)
+### 1) Frontend
 
 Prereqs: Node.js + npm.
 
@@ -35,7 +35,7 @@ Then open http://localhost:3000
 
 The frontend uploads files to the backend defined in `IntelliDash_HP/src/app/configs.js` (`API_ROOT`).
 
-### 2) Backend (Flask API)
+### 2) Backend
 
 Prereqs: Python 3.10+ recommended.
 
