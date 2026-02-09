@@ -58,6 +58,8 @@ If you want to use the `/upload` route (Cloud Storage upload), you also need:
 pip install google-cloud-storage
 ```
 
+or use the `/upload_legacy` route.
+
 Set your OpenAI key (recommended: via environment variable):
 
 - Windows (PowerShell): `setx OPENAI_API_KEY "YOUR_KEY"`
