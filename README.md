@@ -10,8 +10,6 @@ IntelliDash is an AI-powered data analytics dashboard that turns uploaded datase
 
 The image above shows a high-level overview of the system. IntelliDash is a multi-agent system with four agents: ingestion, cleaning, analytics, and visualization. The pipeline combines logic-based agents with LLM-based reasoning agents.
 
-## Testing
-Four CSV datasets are available on the Upload Data File page. You can use these sample files to test the system and explore its functionality.
 
 ### Repository structure
 
@@ -23,6 +21,9 @@ Four CSV datasets are available on the Upload Data File page. You can use these 
 - Frontend: Next.js, React, Recharts
 - Backend: Flask + CORS, LangGraph, OpenAI, Pandas/NumPy, Plotly
 - Deployment: Firebase Hosting (frontend), Cloud Run (backend)
+
+## Testing
+Four CSV datasets are available on the Upload Data File page. You can use these sample files to test the system and explore its functionality.
 
 ## Local development
 
