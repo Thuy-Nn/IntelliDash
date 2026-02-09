@@ -1,12 +1,17 @@
 ## IntelliDash
 
-Live app: https://intellid.web.app/
+Live app: https://intelldash.web.app/
+
+(Note: The previous URL referenced in the thesis was accidentally deleted. Please use this link instead.)
 
 IntelliDash is an AI-powered data analytics dashboard that turns uploaded datasets into an interactive dashboard with automatically generated visualizations.
 
 ![IntelliDash Architecture](IntelliDash%20-%20Overview.jpg)
 
 The image above shows a high-level overview of the system. IntelliDash is a multi-agent system with four agents: ingestion, cleaning, analytics, and visualization. The pipeline combines logic-based agents with LLM-based reasoning agents.
+
+## Testing
+Four CSV datasets are available on the Upload Data File page. You can use these sample files to test the system and explore its functionality.
 
 ### Repository structure
 
